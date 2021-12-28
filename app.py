@@ -36,7 +36,6 @@ def login():
     msg = request.args.get("msg")
     return render_template('login.html', msg=msg)
 
-
 @app.route('/sign_in', methods=['POST'])
 def sign_in():
     #id = request.form['id']
@@ -62,13 +61,19 @@ def sign_up():
     # 회원가입
     username_receive = request.form['username_give']
     password_receive = request.form['password_give']
-    password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+    #아래는 해쉬되어서 온다는 가정
+    #password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
     # DB에 저장
     return jsonify({'result': 'success'})
 @app.route('/sign_up/check_dup', methods=['POST'])
 def check_dup():
+    get_id = request.form('username_give')
     # ID 중복확인
-    return jsonify({'result': 'success'})
+    search_result = list(db.userinfo.find({'id': get_id}, {'_id':False}))
+    if(len(search_result) == 0):#중복된 id가 존재한다.
+        return jsonify({'result': 'success'})
+    else:
+        return jsonify({'result': 'fail'})
 
 ################################################################# instagram.html
 @app.route('/instagram', methods=['GET'])
