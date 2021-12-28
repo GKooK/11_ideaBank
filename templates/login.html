@@ -2,8 +2,8 @@
 <html lang="en">
     <head>
 
-        <title>Hello, world!</title>
-
+        <title>Instagram</title>
+        <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon" sizes="16x16">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -20,10 +20,9 @@
                 $.ajax({
                     type: "POST",
                     url: "/sign_in",
-                    data: {id_give: $('#username').val(), pw_give: hashed_pw},
+                    data: {username_give: $('#username').val(), password_give: hashed_pw},
                     success: function (response) {
                         if (response['result'] == 'success') {
-                            console.log(response['time_token']);
                             $.cookie('mytoken', response['time_token']);
 
                             alert('로그인 완료')
