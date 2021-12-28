@@ -14,6 +14,7 @@
     <img src="wireflame/로그인HTML.PNG"/>
     <img src="wireflame/회원가입HTML.PNG"/>
     <img src="wireflame/글작성HTML.PNG"/>
-    <img src="wireflame/개인페이지HTML.PNG"/>
+    <img src="wireflame/개인페이지HTML.PNG"/><br/>
+    <img src="wireflame/function.PNG"/>
 </div>
 
