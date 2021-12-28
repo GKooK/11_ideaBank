@@ -38,20 +38,21 @@ def login():
 
 @app.route('/sign_in', methods=['POST'])
 def sign_in():
-    #id = request.form['id']
-    #hassed_pw = request.form['hashpw']
-    id = 'test'
-    hassed_pw = '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08'
+    id = request.form['id_give']
+    hassed_pw = request.form['pw_give']
+    #id = 'test'
+    #hassed_pw = '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08'
     search_result = list(db.userinfo.find({'$and': [{'id': id}, {'hash': hassed_pw}]}, {'_id':False}))
     # 로그인
     if(len(search_result)==1):
         #datetime.datetime.strptime(str(time_tocken), '%Y-%m-%d %H:%M:%S.%f') 이건 문자열 형식에서 datetime.datetime 타입으로 바꾸어 주는 것
-        time_tocken = str(datetime.utcnow()+timedelta(seconds=300))
+        #time_token = str(datetime.utcnow()+timedelta(seconds=30))
+        time_token = (datetime.utcnow() + timedelta(seconds=30))
         #print(time_tocken)
-        header = {'id': id, 'time_tocken': time_tocken}
+        header = {'id': id, 'exp': time_token}
         #python 버전에 따라 다르지만 현 버전에서는 decode 가 필요 없이 그냥 문자열임
-        jwt_tocken = jwt.encode(header, SECRET_KEY, algorithm='HS256')
-        return jsonify({'result': 'success', 'tocken':jwt_tocken})
+        jwt_token = jwt.encode(header, SECRET_KEY, algorithm='HS256')
+        return jsonify({'result': 'success', 'time_token': jwt_token})
     else:
         return jsonify({'result': 'fail', 'msg':'아이디/비밀번호가 정확하지 않습니다.'})
 
@@ -67,10 +68,10 @@ def sign_up():
     return jsonify({'result': 'success'})
 @app.route('/sign_up/check_dup', methods=['POST'])
 def check_dup():
-    get_id = request.form('username_give')
+    get_id = request.form['username_give']
     # ID 중복확인
     search_result = list(db.userinfo.find({'id': get_id}, {'_id':False}))
-    if(len(search_result) == 0):#중복된 id가 존재한다.
+    if(len(search_result) == 0):#중z`복된 id가 존재한다.
         return jsonify({'result': 'success'})
     else:
         return jsonify({'result': 'fail'})

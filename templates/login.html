@@ -10,20 +10,21 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-
-
+        <script src="../static/sha256.js"></script>
         <script>
             {% if msg %}
                 alert("{{ msg }}")
             {% endif %}
             function login() {
+                let hashed_pw = SHA256($('#password').val());
                 $.ajax({
                     type: "POST",
-                    url: "/api/login",
-                    data: {id_give: $('#username').val(), pw_give: $('#password').val()},
+                    url: "/sign_in",
+                    data: {id_give: $('#username').val(), pw_give: hashed_pw},
                     success: function (response) {
                         if (response['result'] == 'success') {
-                            $.cookie('mytoken', response['token']);
+                            console.log(response['time_token']);
+                            $.cookie('mytoken', response['time_token']);
 
                             alert('로그인 완료')
                             window.location.href = '/'
